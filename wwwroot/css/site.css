@@ -1,0 +1,42 @@
+body {
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+.wallet-navbar {
+    background: linear-gradient(135deg, #2854c5, #17347d);
+}
+
+.balance-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem;
+    color: white;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #315ed8, #193583);
+}
+
+.balance-card h2 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+}
+
+.wallet-icon {
+    display: grid;
+    width: 3.5rem;
+    height: 3.5rem;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, .4);
+    border-radius: 50%;
+    font-size: 1.5rem;
+}
+
+.table thead th {
+    font-size: .8rem;
+    color: #6b7280;
+    text-transform: uppercase;
+}
+
+.modal-backdrop {
+    opacity: .5;
+}

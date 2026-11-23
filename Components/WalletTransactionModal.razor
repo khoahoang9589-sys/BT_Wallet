@@ -1,0 +1,74 @@
+@inject WalletStateService Wallet
+
+@if (IsVisible)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">@Title</h2>
+                    <button type="button" class="btn-close" aria-label="Đóng" @onclick="Close"></button>
+                </div>
+                <form @onsubmit="Submit" @onsubmit:preventDefault="true">
+                    <div class="modal-body">
+                        <label for="amount" class="form-label">Số tiền</label>
+                        <input id="amount" type="number" class="form-control" @bind="AmountText" @bind:event="oninput" min="1" step="1" placeholder="Ví dụ: 100000" />
+                        @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+                        {
+                            <div class="alert alert-danger mt-3 mb-0">@ErrorMessage</div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" @onclick="Close">Hủy</button>
+                        <button type="submit" class="btn btn-primary">OK</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private string AmountText { get; set; } = string.Empty;
+    private string ErrorMessage { get; set; } = string.Empty;
+    private bool IsVisible { get; set; }
+    private TransactionType Type { get; set; }
+    private string Title => Type == TransactionType.Deposit ? "Nạp tiền vào ví" : "Rút tiền khỏi ví";
+
+    public void Open(TransactionType type)
+    {
+        Type = type;
+        AmountText = string.Empty;
+        ErrorMessage = string.Empty;
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    private void Close()
+    {
+        IsVisible = false;
+        ErrorMessage = string.Empty;
+    }
+
+    private void Submit()
+    {
+        if (!decimal.TryParse(AmountText, NumberStyles.Number, CultureInfo.CurrentCulture, out var amount))
+        {
+            ErrorMessage = "Vui lòng nhập số tiền hợp lệ.";
+            return;
+        }
+
+        var success = Type == TransactionType.Deposit
+            ? Wallet.Deposit(amount, out var error)
+            : Wallet.Withdraw(amount, out error);
+
+        if (!success)
+        {
+            ErrorMessage = error;
+            return;
+        }
+
+        Close();
+    }
+}

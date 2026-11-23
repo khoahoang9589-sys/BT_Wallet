@@ -1,0 +1,23 @@
+@inject WalletStateService Wallet
+
+<section class="balance-card shadow-sm">
+    <div>
+        <p class="mb-1 text-white-50">Số dư hiện tại</p>
+        <h2 class="mb-0">@Wallet.Balance.ToString("N0") đ</h2>
+    </div>
+    <span class="wallet-icon">₫</span>
+</section>
+
+@implements IDisposable
+
+@code {
+    protected override void OnInitialized()
+    {
+        Wallet.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        Wallet.OnChange -= StateHasChanged;
+    }
+}

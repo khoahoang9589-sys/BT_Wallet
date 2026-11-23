@@ -1,0 +1,41 @@
+@page "/"
+@inject WalletStateService Wallet
+
+<PageTitle>Ví tiền</PageTitle>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="mb-4">
+                <p class="text-primary fw-semibold mb-1">QUẢN LÝ TÀI CHÍNH CÁ NHÂN</p>
+                <h1 class="display-6 fw-bold">Ví tiền của tôi</h1>
+                <p class="text-secondary">Theo dõi số dư và các giao dịch nạp, rút tiền.</p>
+            </div>
+
+            <WalletSummary />
+
+            <div class="d-flex gap-2 my-4">
+                <button class="btn btn-primary" @onclick="OpenDepositModal">Nạp tiền</button>
+                <button class="btn btn-outline-danger" @onclick="OpenWithdrawModal">Rút tiền</button>
+            </div>
+
+            <TransactionHistory />
+        </div>
+    </div>
+</div>
+
+<WalletTransactionModal @ref="TransactionModal" />
+
+@code {
+    private WalletTransactionModal? TransactionModal;
+
+    private void OpenDepositModal()
+    {
+        TransactionModal?.Open(TransactionType.Deposit);
+    }
+
+    private void OpenWithdrawModal()
+    {
+        TransactionModal?.Open(TransactionType.Withdraw);
+    }
+}
